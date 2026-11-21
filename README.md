@@ -3,7 +3,7 @@
 ## Công nghệ
 
 - **Backend:** PHP 8.2+, Laravel 12, Blade
-- **Cơ sở dữ liệu:** SQLite (mặc định; Laravel cũng hỗ trợ cấu hình các hệ quản trị khác)
+- **Cơ sở dữ liệu:** SQLite mặc định; migration bảng ghi chú tương thích MySQL
 - **Frontend:** JavaScript, Sass, Bootstrap 5, Bootstrap Icons, jQuery
 - **Build frontend:** Vite 7
 
@@ -15,7 +15,7 @@
 - Giao diện ghi chú hỗ trợ tìm kiếm, lọc theo nhãn/trạng thái chia sẻ, ghim/bỏ ghim, xóa ghi chú và chuyển chế độ lưới/danh sách.
 - Chuyển giao diện sáng/tối; bản nháp trong cửa sổ tạo ghi chú được lưu trên trình duyệt.
 
-> **Phạm vi hiện tại:** Ghi chú trên trang chính là dữ liệu mẫu. Các thao tác ghim, xóa và lọc chỉ thay đổi giao diện; ứng dụng chưa lưu ghi chú vào cơ sở dữ liệu. Bản nháp được lưu trong `localStorage` của trình duyệt.
+> **Phạm vi hiện tại:** Bảng `notes` đã có schema và quan hệ với người dùng, nhưng giao diện trang chính vẫn dùng dữ liệu mẫu, chưa đọc/ghi vào bảng này. Các thao tác ghim, xóa và lọc chỉ thay đổi giao diện; bản nháp được lưu trong `localStorage` của trình duyệt.
 
 ## Các tệp chính
 
@@ -26,7 +26,9 @@
 | `app/Http/Controllers/ProfileController.php` | Cập nhật thông tin tài khoản, mật khẩu và ảnh đại diện. |
 | `app/Http/Controllers/PasswordController.php` | Gửi liên kết và xử lý đặt lại mật khẩu. |
 | `app/Models/User.php` | Mô hình người dùng, xác minh email và thuộc tính ảnh đại diện. |
+| `app/Models/Note.php` | Mô hình ghi chú, ép kiểu nhãn/trạng thái và quan hệ với người dùng. |
 | `database/migrations/2026_11_18_054936_add_avatar_to_users_table.php` | Bổ sung cột lưu đường dẫn ảnh đại diện cho người dùng. |
+| `database/migrations/2026_11_18_142708_create_notes_table.php` | Tạo bảng `notes` gồm nội dung, nhãn, trạng thái và khóa ngoại tới người dùng. |
 | `resources/views/home.blade.php` | Giao diện chính và dữ liệu ghi chú mẫu. |
 | `resources/js/home.js` | Xử lý tìm kiếm, lọc, ghim, xóa, đổi giao diện và lưu bản nháp trên trình duyệt. |
 | `resources/sass/home.scss` | Định dạng giao diện trang ghi chú và thông báo xác minh email. |
@@ -41,6 +43,8 @@ Các cập nhật giao diện gần đây tập trung ở `resources/views/home.
 ## Cài đặt và chạy
 
 Yêu cầu PHP 8.2+, Composer, Node.js và npm.
+
+Ứng dụng mặc định dùng SQLite. Nếu dùng MySQL, hãy tạo database trước và cấu hình `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` cùng `DB_PASSWORD` trong `.env` trước khi chạy migration.
 
 ```powershell
 composer install

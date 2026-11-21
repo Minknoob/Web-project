@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NoteController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -27,9 +28,11 @@ Route::post('/register', [AuthController::class, 'register']);
 
 
 // Home
-Route::get('/home', function () {
-    return view('home');
-})->middleware('auth')->name('home');
+Route::get('/home', [NoteController::class, 'index'])
+    ->middleware('auth')
+    ->name('home');
+
+require __DIR__.'/notes.php';
 
 
 // Email Verification
